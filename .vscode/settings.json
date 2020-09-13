@@ -1,0 +1,11 @@
+{
+    "search.exclude": {
+ 
+    },
+ 
+    "files.exclude": {
+        "**/.gitignore": true,
+        "**/__pycache__/": true
+ },
+ "git.ignoreLimitWarning": true
+ }
