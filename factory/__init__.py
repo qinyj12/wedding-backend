@@ -24,10 +24,11 @@ def creat_app(spare_config = None):
         app.config.from_pyfile(spare_config)
 
     # 引入蓝图
-    from resources import hello, wx_callback, comment
+    from resources import hello, wx_callback, comment, wx_api
     app.register_blueprint(hello.app)
     app.register_blueprint(wx_callback.app)
     app.register_blueprint(comment.app)
+    app.register_blueprint(wx_api.app)
 
     # 使用cors库允许跨域
     CORS(app)
