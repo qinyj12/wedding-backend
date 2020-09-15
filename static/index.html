@@ -20,53 +20,53 @@
 </script>
 
 <script>
-    function openMap(longitude = 120.313553, latitude = 31.896669) {
-        wx.openLocation({
-            latitude, // 纬度，浮点数，范围为90 ~ -90
-            longitude, // 经度，浮点数，范围为180 ~ -180。
-            name: '要导航的地方在哪里🧐?', // 位置名
-            address: '江阴市银河国际酒店', // 地址详情说明
-            scale: 15, // 地图缩放级别,整形值,范围从1~28。默认为最大
-        });
-    }
+let xhr = new XMLHttpRequest();
+xhr.open('get', 'http://192.168.1.6:5000/wx/access?url=' + location.href.split('#')[0], false);
+// 添加http头，发送信息至服务器时内容编码类型
+xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+xhr.onreadystatechange = function () {
+    if (xhr.readyState == 4) {
+        if (xhr.status == 200 || xhr.status == 304) {
+            console.log('请求ok');
+            let config = JSON.parse(xhr.responseText);
+            console.log(config);
+            initConfig(config);
 
-    function initConfig(config = {}) {
-        wx.config({
-            debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
-            appId: 'wxe0e65e72672a7c5d', // 必填，公众号的唯一标识
-            timestamp: config.timestamp, // 必填，生成签名的时间戳
-            nonceStr: config.nonceStr, // 必填，生成签名的随机串
-            signature: config.signature, // 必填，签名
-            jsApiList: ['openLocation'] // 必填，需要使用的JS接口列表
-        });
-        //获取定位信息
-        wx.ready(function () {
-            console.log('init')
-        });
-        wx.error(function (res) {
-            console.log(res)
-        });
-    }
-
-    let xhr = new XMLHttpRequest();
-    xhr.open('get', 'http://192.168.1.6:5000/wx/access');
-    // 添加http头，发送信息至服务器时内容编码类型
-    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-    xhr.onreadystatechange = function () {
-        if (xhr.readyState == 4) {
-            if (xhr.status == 200 || xhr.status == 304) {
-                console.log('请求ok');
-                let config = JSON.parse(xhr.responseText);
-                console.log(config);
-                initConfig(config);
-
-            } else {
-                console.log('请求失败')
-                console.log(xhr.responseText)
-            }
+        } else {
+            console.log('请求失败')
+            console.log(xhr.responseText)
         }
     }
-    xhr.send();
+}
+xhr.send();
+
+function openMap(longitude = 120.313553, latitude = 31.896669) {
+    wx.openLocation({
+        latitude, // 纬度，浮点数，范围为90 ~ -90
+        longitude, // 经度，浮点数，范围为180 ~ -180。
+        name: '要导航的地方在哪里🧐?', // 位置名
+        address: '江阴市银河国际酒店', // 地址详情说明
+        scale: 15, // 地图缩放级别,整形值,范围从1~28。默认为最大
+    });
+}
+
+function initConfig(config = {}) {
+    wx.config({
+        debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+        appId: 'wxe0e65e72672a7c5d', // 必填，公众号的唯一标识
+        timestamp: config.timestamp, // 必填，生成签名的时间戳
+        nonceStr: config.nonceStr, // 必填，生成签名的随机串
+        signature: config.signature, // 必填，签名
+        jsApiList: ['openLocation'] // 必填，需要使用的JS接口列表
+    });
+    //获取定位信息
+    wx.ready(function () {
+        console.log('init')
+    });
+    wx.error(function (res) {
+        console.log(res)
+    });
+}
 </script>
 
 </html>

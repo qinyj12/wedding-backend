@@ -1,16 +1,23 @@
-from flask import Blueprint, current_app, request
-from flask_restful import Api, Resource
+from flask import Blueprint, current_app, make_response
+from flask_restful import Api, Resource, reqparse
 import requests, time, hashlib
+import random
 
-from requests.models import codes
+# 自定义一个生成随机字符串的类
+class Random_str():
+    def __init__(self, count):
+        self.count = count
+        self.mother_list = 'qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM1234567890'
+    def __repr__(self):
+        return ''.join([random.choice(self.mother_list) for _ in range(self.count)])
 
 app = Blueprint('wx_api', __name__, url_prefix = '/wx')
-
 api = Api(app)
+parser = reqparse.RequestParser()
 
 class Wx_api(Resource):
     def get(self):
-        return request.url
+        return make_response('hello wx')
 
 class Access_permission(Resource):
     def get(self):
@@ -33,27 +40,23 @@ class Access_permission(Resource):
             }
         ).json()['ticket']
 
-        # 随机字符串
-        noncestr = 'Wm3WZYTPz0wzccnW'
+        # 随机字符串，使用我自定义的类
+        noncestr = str(Random_str(16))
         # 时间戳
         timestamp = round(time.time())
-        # 请求地址
-        request_url = request.url
+        # 请求地址，就是前端的地址
+        parser.add_argument('url', type = str, location = 'args')
+        args = parser.parse_args()
+        request_url = args['url']
 
         # 组合成一个新字符串
         temp_str = 'jsapi_ticket=' + ticket + '&noncestr=' + noncestr + '&timestamp=' + str(timestamp) + '&url=' + request_url
 
-        # sha1加密
-        sha1 = hashlib.sha1()
-        sha1.update(temp_str.encode('utf-8'))
+        # 再把这个新字符串用sha1加密，这样就形成了签名
+        signature = hashlib.sha1(temp_str.encode('utf-8')).hexdigest()
 
-        # 生存signature
-        signature = sha1.hexdigest().upper()
-
-        import sys
-        print({'noncestr': noncestr, 'timestamp': timestamp, 'signature': signature, 'url': request_url}, file = sys.stderr)
         # 返回
-        return {'noncestr': noncestr, 'timestamp': timestamp, 'signature': signature}
+        return {'nonceStr': noncestr, 'timestamp': timestamp, 'signature': signature}
 
 class Weixin_page(Resource):
     def get(self):

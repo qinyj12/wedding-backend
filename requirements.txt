@@ -5,3 +5,4 @@ flask_restful
 sqlalchemy
 flask_cors
 datetime
+requests

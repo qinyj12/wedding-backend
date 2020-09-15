@@ -1,3 +1,3 @@
-a = 'abcDa'
+a ='111'
 
-print(a.upper())
+print(a, '1')
