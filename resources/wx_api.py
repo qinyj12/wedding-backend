@@ -57,18 +57,17 @@ class Token_and_ticket(Resource):
         ).json()['ticket']
 
         # 因为只是后端调用这个接口，所以不要json格式
-        return make_response({'token': access_token, 'ticket': ticket})
+        return {'token': access_token, 'ticket': ticket}
 
 # 定义一个获取签名的资源
 class Signature(Resource):
     def get(self):
         # 先获取当前域名，切换测试、服务器地址比较麻烦，动态获取更好
-        current_hostname = request.url_root.replace(request.script_root, '')
+        # current_hostname = request.url_root.replace(request.script_root, '')
+        current_hostname = 'http://127.0.0.1:5000'
+
         # 调用自己的接口，获取token和ticket
         token_and_ticket = requests.get(current_hostname + url_for('wx_api.token_and_ticket')).json()
-
-        import sys
-        print(token_and_ticket,file=sys.stderr)
 
         token, ticket = token_and_ticket['token'], token_and_ticket['ticket']
 
