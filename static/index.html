@@ -21,7 +21,10 @@
 
 <script>
 let xhr = new XMLHttpRequest();
-xhr.open('get', 'http://192.168.1.6:5000/wx/access?url=' + location.href.split('#')[0], false);
+// 服务器的请求地址
+// xhr.open('get', 'http://wedding.southdog.cool/wx/access?url=' + location.href.split('#')[0], false);
+// 本地测试地址
+xhr.open('get', 'http://127.0.0.1:5000/wx/signature?url=' + location.href.split('#')[0], false);
 // 添加http头，发送信息至服务器时内容编码类型
 xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
 xhr.onreadystatechange = function () {
@@ -53,6 +56,9 @@ function openMap(longitude = 120.313553, latitude = 31.896669) {
 function initConfig(config = {}) {
     wx.config({
         debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+        // 公众号飞快的香港记者的appid
+        // appId: 'wx5654d7882a1bdf03', // 必填，公众号的唯一标识
+        // 测试号的appid
         appId: 'wxe0e65e72672a7c5d', // 必填，公众号的唯一标识
         timestamp: config.timestamp, // 必填，生成签名的时间戳
         nonceStr: config.nonceStr, // 必填，生成签名的随机串

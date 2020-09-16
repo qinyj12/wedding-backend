@@ -6,3 +6,4 @@ sqlalchemy
 flask_cors
 datetime
 requests
+flask_caching

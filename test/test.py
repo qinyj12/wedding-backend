@@ -1,3 +1,4 @@
-a ='111'
+a = 'abcde'
+b = 'cde'
 
-print(a, '1')
+print(a.replace(b, ''))

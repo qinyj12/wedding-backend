@@ -23,6 +23,10 @@ def creat_app(spare_config = None):
     else:
         app.config.from_pyfile(spare_config)
 
+    # 从cache.py中引入cache对象
+    from resources.cache import cache
+    cache.init_app(app)
+
     # 引入蓝图
     from resources import hello, wx_callback, comment, wx_api
     app.register_blueprint(hello.app)
