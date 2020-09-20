@@ -1,4 +1,4 @@
-from flask import Blueprint, current_app, make_response, redirect, url_for, request
+from flask import Blueprint, current_app, redirect, url_for, request, current_app
 from flask_restful import Api, Resource, reqparse
 from .cache import cache
 import requests, time, hashlib
@@ -31,18 +31,15 @@ class Token_and_ticket(Resource):
             url = 'https://api.weixin.qq.com/cgi-bin/token?', 
             params = {
                 "grant_type": 'client_credential',
-                # 公众号飞快的香港记者的appid和secret
-                # 'appid':'wx5654d7882a1bdf03',
-                # 'secret':'13ab13979d6a36a518f19bd2f4c4b664',
-                # 测试号的appid和secret
-                'appid':'wxe0e65e72672a7c5d',
-                'secret':'20d9cf9334f1750b8df6655e5fbb09aa',
+                # 微信号的appid和secret
+                'appid': current_app.config['WX_APPID'],
+                'secret': current_app.config['WX_SECRET']
             }
         ).json()
 
         # 先把返回值打印出来看看有没有问题
-        # import sys
-        # print(request_token, file=sys.stderr)
+        import sys
+        print(request_token, file=sys.stderr)
 
         # 然后生成token
         access_token = request_token['access_token']
@@ -62,9 +59,8 @@ class Token_and_ticket(Resource):
 # 定义一个获取签名的资源
 class Signature(Resource):
     def get(self):
-        # 先获取当前域名，切换测试、服务器地址比较麻烦，动态获取更好
-        # current_hostname = request.url_root.replace(request.script_root, '')
-        current_hostname = 'http://127.0.0.1:5000'
+        # 这里要设置成微信公众号js安全域名
+        current_hostname = current_app.config['WX_SECURITY_DOMAIN']
 
         # 调用自己的接口，获取token和ticket
         token_and_ticket = requests.get(current_hostname + url_for('wx_api.token_and_ticket')).json()
@@ -91,7 +87,7 @@ class Signature(Resource):
 
 class Weixin_page(Resource):
     def get(self):
-        return current_app.send_static_file('index.html')
+        return current_app.send_static_file('wx_navigation.html')
 
 
 api.add_resource(Wx_api, '/')

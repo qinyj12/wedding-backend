@@ -28,11 +28,12 @@ def creat_app(spare_config = None):
     cache.init_app(app)
 
     # 引入蓝图
-    from resources import hello, wx_callback, comment, wx_api
+    from resources import hello, wx_callback, comment, wx_api, invitation
     app.register_blueprint(hello.app)
     app.register_blueprint(wx_callback.app)
     app.register_blueprint(comment.app)
     app.register_blueprint(wx_api.app)
+    app.register_blueprint(invitation.app)
 
     # 使用cors库允许跨域
     CORS(app)

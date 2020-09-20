@@ -9,7 +9,7 @@ parser = reqparse.RequestParser()
 # 用于JS接口安全域名
 class MP_verify(Resource):
     def get(self):
-        return current_app.send_static_file('MP_verify_ErVytttLPsIDzh7X.txt')
+        return current_app.send_static_file('MP_verify_YCd0GaTLnJsWtTaM.txt')
 
 # 用于基本配置->token
 class Token_verify(Resource):
@@ -24,7 +24,7 @@ class Token_verify(Resource):
         timestamp = args['timestamp']
         nonce  = args['nonce']
         echostr = args['echostr']
-        token = '57fzrg'
+        token = 'xiaodong'
 
         import sys
         print(signature, file = sys.stderr)
@@ -50,5 +50,5 @@ class Token_verify(Resource):
         else:
             return ""
 
-api.add_resource(MP_verify, '/MP_verify_ErVytttLPsIDzh7X.txt')
+api.add_resource(MP_verify, '/MP_verify_YCd0GaTLnJsWtTaM.txt')
 api.add_resource(Token_verify, '/verify/wxtoken')

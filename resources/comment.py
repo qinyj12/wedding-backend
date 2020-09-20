@@ -14,7 +14,7 @@ class Comment(Resource):
     def get(self):
         # database_comments.id.desc()根据id倒序排序
         # [0: 3]切片
-        all_comments = database_session.query(database_comments).order_by(database_comments.id.desc())[0: 15]
+        all_comments = database_session.query(database_comments).order_by(database_comments.id.desc())[0: 30]
         return [comment.content for comment in all_comments]
     # 增
     def post(self):
